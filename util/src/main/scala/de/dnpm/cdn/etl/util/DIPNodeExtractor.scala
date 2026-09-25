@@ -37,7 +37,6 @@ import play.api.libs.ws.JsonBodyReadables._
 import play.api.libs.json.{
   Json,
   JsValue,
-  Format,
   Reads,
   Writes
 }
@@ -144,7 +143,7 @@ with Logging
   }
 
 
-  override def submission[T: Format](
+  override def submission[T: Reads: Writes](
     report: Submission.Report,
     projections: Seq[String] = Nil
   )(

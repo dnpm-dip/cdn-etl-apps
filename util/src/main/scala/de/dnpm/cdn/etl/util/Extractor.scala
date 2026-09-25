@@ -8,7 +8,10 @@ import de.dnpm.dip.service.mvh.{
   Submission,
   UseCase
 }
-import play.api.libs.json.Format
+import play.api.libs.json.{
+  Reads,
+  Writes
+}
 
 
 trait Extractor[F[_],Ctx]
@@ -23,7 +26,7 @@ trait Extractor[F[_],Ctx]
   ): F[EitherNel[String,Seq[Submission.Report]]] 
 
 
-  def submission[T: Format](
+  def submission[T: Reads: Writes](
     report: Submission.Report,
     projections: Seq[String] = Nil
   )(
