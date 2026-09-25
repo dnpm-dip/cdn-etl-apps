@@ -4,7 +4,7 @@ ThisBuild / organization := "de.dnpm"
 ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / version      := sys.env.getOrElse("VERSION","1.0.0")
 
-val ownerRepo  = sys.env.getOrElse("REPOSITORY","dnpm-dip/etl").split("/")
+val ownerRepo  = sys.env.getOrElse("REPOSITORY","dnpm-dip/cdn-etl-apps").split("/")
 ThisBuild / githubOwner      := ownerRepo(0)
 ThisBuild / githubRepository := ownerRepo(1)
 
