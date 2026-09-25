@@ -29,7 +29,8 @@ lazy val global = project
   )
   .aggregate(
     util,
-    diagnosis_codes
+    diagnosis_codes,
+    submissions
   )
 
 lazy val util = project
@@ -37,8 +38,7 @@ lazy val util = project
     name := "cdn-etl-util",
     settings,
     libraryDependencies ++= Seq(
-//      dependencies.scalatest,
-      dependencies.service_base,
+      dependencies.bfarm_model_base,
       dependencies.play_ahc,
       dependencies.play_ahc_js,
     ),
@@ -55,10 +55,26 @@ lazy val diagnosis_codes = project
       dependencies.logback,
       dependencies.mtb_model,
       dependencies.rd_model,
-      dependencies.bfarm_model
     ),
     assembly / assemblyJarName := "dnpm-cdn-diagnosis-etl.jar",
     assembly / mainClass       := Some("de.dnpm.cdn.etl.diagnoses.Processor")
+  )
+  .dependsOn(util)
+
+lazy val submissions = project
+  .settings(
+    name := "cdn-submissions-etl",
+    settings,
+    libraryDependencies ++= Seq(
+      dependencies.scalatest,
+      dependencies.logback,
+      dependencies.mtb_model,
+      dependencies.rd_model,
+      dependencies.bfarm_onco_model,
+      dependencies.bfarm_rd_model
+    ),
+    assembly / assemblyJarName := "dnpm-cdn-submissions-etl.jar",
+    assembly / mainClass       := Some("de.dnpm.cdn.etl.submissions.Processor")
   )
   .dependsOn(util)
 
@@ -69,14 +85,15 @@ lazy val diagnosis_codes = project
 
 lazy val dependencies =
   new {
-    val scalatest    = "org.scalatest"     %% "scalatest"               % "3.2.20" % Test
-    val logback      = "ch.qos.logback"    %  "logback-classic"         % "1.5.18"
-    val play_ahc     = "org.playframework" %% "play-ahc-ws-standalone"  % "3.0.7"
-    val play_ahc_js  = "org.playframework" %% "play-ws-standalone-json" % "3.0.7"
-    val service_base = "de.dnpm.dip"       %% "service-base"            % "1.5.1"
-    val mtb_model    = "de.dnpm.dip"       %% "mtb-dto-model"           % "1.2.3"
-    val rd_model     = "de.dnpm.dip"       %% "rd-dto-model"            % "1.2.1"
-    val bfarm_model  = "de.dnpm"           %% "dnpm-bfarm-model-base"   % "1.0.5"
+    val scalatest        = "org.scalatest"     %% "scalatest"                     % "3.2.20" % Test
+    val logback          = "ch.qos.logback"    %  "logback-classic"               % "1.5.18"
+    val play_ahc         = "org.playframework" %% "play-ahc-ws-standalone"        % "3.0.7"
+    val play_ahc_js      = "org.playframework" %% "play-ws-standalone-json"       % "3.0.7"
+    val mtb_model        = "de.dnpm.dip"       %% "mtb-dto-model"                 % "1.2.3"
+    val rd_model         = "de.dnpm.dip"       %% "rd-dto-model"                  % "1.2.1"
+    val bfarm_model_base = "de.dnpm"           %% "dnpm-bfarm-model-base"         % "1.0.5"
+    val bfarm_onco_model = "de.dnpm"           %% "dnpm-bfarm-model-oncology"     % "1.0.6"
+    val bfarm_rd_model   = "de.dnpm"           %% "dnpm-bfarm-model-rare-disease" % "1.0.5"
   }
 
 
